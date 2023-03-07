@@ -20,3 +20,7 @@ Route::get('/', function () {
 Route::get('/test-grid', function () {
     return view('/test-grid');
 });
+
+Route::get('/test-flex', function () {
+    return view('/test-flex');
+});
