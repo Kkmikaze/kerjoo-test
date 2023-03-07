@@ -9,12 +9,12 @@ class AnnualLeaveRepository implements AnnualLeaveRepositoryInterface
 {
     public function getAllAnnualLeaves() 
     {
-        return AnnualLeave::all();
+        return AnnualLeave::with('annualLeaveDates')->get();
     }
 
     public function getAnnualLeaveById($annualLeaveId) 
     {
-        return AnnualLeave::findOrFail($annualLeaveId);
+        return AnnualLeave::with('annualLeaveDates')->findOrFail($annualLeaveId);
     }
 
     public function deleteAnnualLeave($annualLeaveId) 

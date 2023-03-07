@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AnnualLeaveRequest;
 use App\Interfaces\AnnualLeaveRepositoryInterface;
 use App\Models\AnnualLeave;
 use Illuminate\Http\JsonResponse;
@@ -24,58 +25,56 @@ class AnnualLeaveController extends Controller
     public function index(): JsonResponse 
     {
         return response()->json([
+            'message' => 'Berhasil',
             'data' => $this->annualLeaveRepository->getAllannualLeaves()
         ]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\AnnualLeaveRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AnnualLeaveRequest $request)
     {
-        //
+        try {
+            $validated = array_merge(['user_id' => 1], $request->validated());
+        
+            return response()->json([
+                'message' => 'Berhasil',
+                'data' => $this->annualLeaveRepository->createAnnualLeave($validated)
+            ]);
+        } catch (\Throwable $th) {
+            $error = $th->getMessage() . '(' . $th->getCode() . ') => ' . $th->getFile() . ':' . $th->getline();
+            Log::error($error);
+            return response()->json([
+                'message' => 'Terjadi Kendala Server',
+                'data' => null
+            ]);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\AnnualLeave  $annualLeave
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show(AnnualLeave $annualLeave)
+    public function show(Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\AnnualLeave  $annualLeave
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(AnnualLeave $annualLeave)
-    {
-        //
+        $annualLeaveId = $request->route('id');
+        
+        return response()->json([
+            'message' => 'Berhasil',
+            'data' => $this->annualLeaveRepository->getAnnualLeaveById($annualLeaveId)
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\AnnualLeave  $annualLeave
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, AnnualLeave $annualLeave)
@@ -86,7 +85,7 @@ class AnnualLeaveController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\AnnualLeave  $annualLeave
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function destroy(AnnualLeave $annualLeave)

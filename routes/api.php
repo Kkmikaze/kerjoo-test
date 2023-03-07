@@ -20,3 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('annual-leaves', [AnnualLeaveController::class, 'index']);
+Route::get('annual-leaves/{id}', [AnnualLeaveController::class, 'show']);
+Route::post('annual-leaves', [AnnualLeaveController::class, 'store']);
