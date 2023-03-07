@@ -2,19 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\AnnualLeaveRepositoryInterface;
 use App\Models\AnnualLeave;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AnnualLeaveController extends Controller
 {
+    private AnnualLeaveRepositoryInterface $annualLeaveRepository;
+
+    public function __construct(AnnualLeaveRepositoryInterface $annualLeaveRepository) 
+    {
+        $this->annualLeaveRepository = $annualLeaveRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse 
     {
-        //
+        return response()->json([
+            'data' => $this->annualLeaveRepository->getAllannualLeaves()
+        ]);
     }
 
     /**
