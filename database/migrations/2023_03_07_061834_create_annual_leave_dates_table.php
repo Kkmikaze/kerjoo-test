@@ -16,7 +16,7 @@ class CreateAnnualLeaveDatesTable extends Migration
         Schema::create('annual_leave_dates', function (Blueprint $table) {
             $table->id();
             $table->foreignId('annual_leave_id')->constrained('annual_leaves')->onDelete('cascade');
-            $table->date('date');
+            $table->date('date')->unique();
             $table->timestamps();
         });
     }
